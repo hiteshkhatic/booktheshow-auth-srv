@@ -1,7 +1,9 @@
+CREATE TYPE "role" AS ENUM('admin', 'user');--> statement-breakpoint
 CREATE TABLE "users" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
 	"email" text NOT NULL UNIQUE,
 	"password_hash" text NOT NULL,
+	"role" "role" DEFAULT 'user'::"role" NOT NULL,
 	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint

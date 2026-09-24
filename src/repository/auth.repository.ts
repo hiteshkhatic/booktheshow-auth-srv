@@ -60,8 +60,9 @@ export const revokeAllUserRefreshTokens = async (userId: string) => {
 export const revokeRefreshTokenByHash = async (
   tokenHash: string
 ) => {
-  return await db
+	const result = await db
     .update(refreshTokensTable)
     .set({ revoked: true })
     .where(eq(refreshTokensTable.token_hash, tokenHash));
+	return result;
 };

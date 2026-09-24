@@ -1,11 +1,20 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "1e548c21-e140-4c61-85fb-a03dd33cab90",
+  "id": "3db631ee-e972-4483-a4e0-2a094c55f1ea",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
   "ddl": [
+    {
+      "values": [
+        "admin",
+        "user"
+      ],
+      "name": "role",
+      "entityType": "enums",
+      "schema": "public"
+    },
     {
       "isRlsEnabled": false,
       "name": "users",
@@ -53,6 +62,19 @@
       "generated": null,
       "identity": null,
       "name": "password_hash",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "role",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'user'",
+      "generated": null,
+      "identity": null,
+      "name": "role",
       "entityType": "columns",
       "schema": "public",
       "table": "users"

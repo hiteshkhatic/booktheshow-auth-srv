@@ -39,7 +39,7 @@ export const handleRefresh = async (
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.status(200).json({ accessToken});
+    return res.status(200).json({ accessToken, newRefreshToken});
   } catch (error) {
     next(error);
   }
@@ -50,8 +50,15 @@ export const handleLogout = asyncHandler(
     const refreshToken =
       req.cookies?.refreshToken || req.body?.refreshToken;
 
-    if (refreshToken) {
-      await logout(refreshToken);
+      if (!refreshToken) {
+        return res.status(400).json({ message: "No refresht token here"});
+      }
+
+    
+    const isRevokedSuccessfully = await logout(refreshToken);
+
+    if (!isRevokedSuccessfully) {
+      return res.status(400).json({ message: "invalid or expired refresh token"});
     }
 
     res.clearCookie("refreshToken", {
@@ -72,7 +79,7 @@ export const handleVerify = async (
   next: NextFunction
 ) => {
   try {
-    const authHeader = req.headers.authorization;
+    const authHeader = req.headers.authorization || req.body?.accessToken;
 
     if (!authHeader?.startsWith("Bearer ")) {
       return res.status(401).json({

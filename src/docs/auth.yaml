@@ -1,0 +1,98 @@
+paths:
+  /api/auth/register:
+    post:
+      summary: Register a new user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        201:
+          description: User registered successfully
+        400:
+          description: Validation error or user already exists
+
+  /api/auth/login:
+    post:
+      summary: Authenticate user and get tokens
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        200:
+          description: Login successful, returns tokens
+        401:
+          description: Invalid credentials
+
+  /api/auth/refresh:
+    post:
+      summary: Refresh authentication tokens
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        200:
+          description: New tokens generated successfully
+        401:
+          description: Invalid or expired refresh token
+
+  /api/auth/logout:
+    post:
+      summary: Log out user and invalidate session
+      tags: [Auth]
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties: 
+                refreshToken:
+                  type: string 
+      responses:
+        200:
+          description: Logged out successfully
+
+  /api/auth/verify:
+    get:
+      summary: Verify active user session or token
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+      responses:
+        200:
+          description: Token is valid
+        401:
+          description: Unauthorized / invalid session

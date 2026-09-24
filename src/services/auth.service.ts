@@ -108,10 +108,16 @@ if (!user) {
   return { accessToken: newAccessToken, refreshToken: newRefreshToken }
 }
 
-export const logout = async (refreshToken: string) => {
+export const logout = async (refreshToken: string): Promise<boolean> => {
   const tokenHash = hashToken(refreshToken)
 
-  await revokeRefreshTokenByHash(tokenHash)
+  const result = await revokeRefreshTokenByHash(tokenHash)
+
+  if (!result || result.rowCount === 0) {
+    return false;
+  }
+
+  return true;
 }
 
 export const verifyAccessToken = (accessToken: string) => {
